@@ -1,0 +1,17 @@
+[Unit]
+Description=Node Demo
+Requires=docker.service
+After=docker.service
+
+[Service]
+EnvironmentFile=/etc/environment
+TimeoutStartSec=0
+Restart=always
+RestartSec=10s
+ExecStartPre=-/usr/bin/docker kill demo2
+ExecStartPre=-/usr/bin/docker rm demo2
+ExecStart=/usr/bin/docker run -p 4000:4000 --net=host --name demo2 demo2
+ExecStop=/usr/bin/docker stop demo2
+
+[X-Fleet]
+X-Conflicts=demo2.service
